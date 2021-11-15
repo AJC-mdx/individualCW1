@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <script src="https://unpkg.com/vue"></script>
+    <script src="lessons.js" async defer></script>
+</head>
+
+<body>
+
+    <div id="app">
+
+        <h1>{{sitename}}</h1>
+
+        <img v-bind:src='Lesson.Image' id="im">
+        <div id="sub">
+            <div v-if='showLesson'>
+                <h2>{{Lesson.Subject}}</h2>
+                <em>Price: {{Lesson.Price}}</em><br>
+                <em>{{Lesson.Location}}</em><br>
+                <h4>No of Spaces: {{Lesson.Spaces}}</h4>
+                <button v-on:click='checkResponse' v-bind:disabled='!canAddToCart'> Add to cart
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>
