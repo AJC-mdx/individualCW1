@@ -20,19 +20,40 @@
         <h1>{{sitename}}</h1>
 
         <img v-bind:src='Lesson.Image' id="im">
+        <br><br>
         <div id="sub">
+            <button v-on:click='showCheckout' v-bind:disabled='!cartLength'><span
+                    class="fas fa-shopping-cart"></span>Checkout</button>
             <div v-if='showLesson'>
                 <h2>{{Lesson.Subject}}</h2>
                 <em>Price: {{Lesson.Price}}</em><br>
                 <em>{{Lesson.Location}}</em><br>
                 <h4>No of Spaces: {{Lesson.Spaces}}</h4>
-                <button v-on:click='checkResponse' v-bind:disabled='!canAddToCart'> Add to cart
-                </button>
+                <button v-on:click='checkResponse' v-on:click='addToCart' v-bind:disabled='!canAddToCart'>Add to
+                    cart</button>
+            </div>
+            <div v-else>
+                <h1> Checkout </h1>
+                <p>
+                    <strong>First Name:</strong>
+                    <input v-model='order.firstName' />
+                </p>
+                <p>
+                    <strong>Last Name:</strong>
+                    <input v-model='order.lastName' />
+                </p>
+                <p>
+                    <strong>Phone Number:</strong>
+                    <input v-model='order.phoneNumber' />
+                </p>
+                <h3>Order Information</h3>
+                <p>First Name: {{order.firstName}}</p>
+                <p>Last Name: {{order.lastName}}</p>
+                <p>Phone Number: {{order.phoneNumber}}</p>
+                <button @click='confirmOrder'>Place Order</button>
             </div>
         </div>
     </div>
-
-
 </body>
 
 </html>
