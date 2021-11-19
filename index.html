@@ -2,58 +2,117 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title></title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
     <script src="https://unpkg.com/vue"></script>
     <script src="lessons.js" async defer></script>
 </head>
 
 <body>
-
     <div id="app">
-
         <h1>{{sitename}}</h1>
 
-        <img v-bind:src='Lesson.Image' id="im">
+        <!--checkout button-->
+        <button v-on:click="showCheckout" v-bind:disabled="!cartLength">
+            <span class="fas fa-shopping-cart"></span>Checkout
+        </button>
+
+        <!--lessons page-->
         <br><br>
         <div id="sub">
-            <button v-on:click='showCheckout' v-bind:disabled='!cartLength'><span
-                    class="fas fa-shopping-cart"></span>Checkout</button>
-            <div v-if='showLesson'>
-                <h2>{{Lesson.Subject}}</h2>
-                <em>Price: {{Lesson.Price}}</em><br>
-                <em>{{Lesson.Location}}</em><br>
-                <h4>No of Spaces: {{Lesson.Spaces}}</h4>
-                <button v-on:click='checkResponse' v-on:click='addToCart' v-bind:disabled='!canAddToCart'>Add to
-                    cart</button>
+            <div v-if="showLesson">
+                <div v-for= 'lesson in lessons'>
+                    <img v-bind:src="lesson.Image" id="im" />
+                    <h2>{{lesson.Subject}}</h2>
+                    <em>Price: £{{lesson.Price}}</em><br />
+                    <em>Location: {{lesson.Location}}</em><br />
+                    <h4>No of Spaces: {{lesson.Spaces}}</h4>
+                    <button v-on:click='addToCart(lesson)' v-bind:disabled="!canAddToCart(lesson)">
+                        <span class="fas fa-cart-plus"></span> Add to cart
+                    </button><br><br>
+                </div>
             </div>
+
+            <!--checkout page-->
             <div v-else>
-                <h1> Checkout </h1>
+                <h1>Checkout</h1>
                 <p>
                     <strong>First Name:</strong>
-                    <input v-model='order.firstName' />
+                    <input v-model="order.firstName" />
                 </p>
                 <p>
                     <strong>Last Name:</strong>
-                    <input v-model='order.lastName' />
+                    <input v-model="order.lastName" />
                 </p>
                 <p>
                     <strong>Phone Number:</strong>
-                    <input v-model='order.phoneNumber' />
+                    <input v-model="order.phoneNumber" />
                 </p>
                 <h3>Order Information</h3>
                 <p>First Name: {{order.firstName}}</p>
                 <p>Last Name: {{order.lastName}}</p>
                 <p>Phone Number: {{order.phoneNumber}}</p>
-                <button @click='confirmOrder'>Place Order</button>
+                <button @click="confirmOrder">Place Order</button>
             </div>
         </div>
     </div>
+    <script>
+        let lessonStore = new Vue({
+            el: "#app",
+            data: {
+                sitename: "After School Lessons",
+                lessons: lessons,
+                showLesson: true,
+                cart: [],
+                //didnt get to finish form validation
+                order: {
+                    firstName: "",
+                    lastName: "",
+                    phoneNumber: "",
+                },
+            },
+            methods: {
+                //adds to cart and taskes one space off the 'spaces' for each product
+                addToCart(lesson) {
+                    this.cart.push(lesson.Subject);
+                    lesson.Spaces = lesson.Spaces - 1
+                },
+                //checks that spaces for each lesson are greater than 0
+                canAddToCart(lesson) {
+                    return lesson.Spaces > 0;
+                },
+                //increases the number of items in the cart array
+                cartCount(Subject) {
+                    let count = 0
+                    for (let i=0; i<this.cart.length; i++) {
+                        if (this.cart[i] === Subject) {
+                            count++
+                        }
+                    }
+                    return count
+                },
+                //switches between checkout and product page
+                showCheckout() {
+                    this.showLesson = this.showLesson ? false : true;
+                },
+
+                //confirms order with a message
+                confirmOrder() {
+                    alert("Your order has been submitted.");
+                },
+            },
+            computed: {
+                //checks number of items in the cart array
+                cartLength() {
+                    return this.cart.length;
+                }
+            }
+        });
+    </script>
 </body>
 
 </html>
