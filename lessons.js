@@ -1,47 +1,72 @@
-let Lesson = new Vue({
-    el: '#app',
-    data: {
-        sitename: 'After School Lessons',
-        showLesson: true,
-        Lesson: {
-            Subject: 'Maths',
-            Location: 'London',
-            Price: '$100',
-            Spaces: 5,
-            Image: 'https://img.icons8.com/ios/50/000000/math.png'
-        },
-        cart:[],
-        order: {
-            firstName:'',
-            lastName:'',
-            phoneNumber:''
-        }
-    },
- methods: {
- checkResponse(){
-    this.reduceSpace();
-    this.addToCart();
- },
- reduceSpace(){
-        this.Lesson.Spaces = this.Lesson.Spaces - 1;
- },
- addToCart(){
-        this.cart.push(this.Lesson.Subject);
- },
-   showCheckout(){
-       this.showLesson = this.showLesson ? false : true
-   },
-
-   confirmOrder(){
-       alert('Your order has been submitted.')
-   }
- },
- computed: {
-     cartLength() {
-         return this.cart.length
-     },
-     canAddToCart() {
-         return this.Lesson.Spaces > 0
-     }
- }
- });
+let lessons = [
+  {
+    Subject: "Maths",
+    Location: "London",
+    Price: 100,
+    Spaces: 5,
+    Image: "https://img.icons8.com/ios/50/000000/math.png",
+  },
+  {
+    Subject: "English",
+    Location: "London",
+    Price: 100,
+    Spaces: 5,
+    Image: "https://img.icons8.com/ios-glyphs/30/000000/literature.png",
+  },
+  {
+    Subject: "Biology",
+    Location: "London",
+    Price: 80,
+    Spaces: 5,
+    Image: "https://img.icons8.com/ios-glyphs/30/000000/biotech.png",
+  },
+  {
+    Subject: "Chemistry",
+    Location: "London",
+    Price: 80,
+    Spaces: 5,
+    Image: "https://img.icons8.com/external-flatart-icons-outline-flatarticons/64/000000/external-chemistry-school-and-learning-flatart-icons-outline-flatarticons.png",
+  },
+  {
+    Subject: "Physics",
+    Location: "London",
+    Price: 80,
+    Spaces: 5,
+    Image: "https://img.icons8.com/ios/64/000000/physics.png",
+  },
+  {
+    Subject: "Religious Education",
+    Location: "London",
+    Price: 50,
+    Spaces: 5,
+    Image: "https://img.icons8.com/ios/50/000000/christian-prayer.png",
+  },
+  {
+    Subject: "Business Studies",
+    Location: "London",
+    Price: 40,
+    Spaces: 5,
+    Image: "https://img.icons8.com/ios-glyphs/30/000000/bank-card-dollar.png",
+  },
+  {
+    Subject: "Information Technology",
+    Location: "London",
+    Price: 30,
+    Spaces: 5,
+    Image: "https://img.icons8.com/ios-glyphs/30/000000/workstation.png",
+  },
+  {
+    Subject: "Product Design",
+    Location: "London",
+    Price: 20,
+    Spaces: 5,
+    Image:"https://img.icons8.com/ios-glyphs/30/000000/design.png",
+  },
+  {
+    Subject: "App Development",
+    Location: "London",
+    Price: "1,000,000",
+    Spaces: 5,
+    Image: "https://img.icons8.com/ios-glyphs/30/000000/developer-mode.png",
+  }
+];
