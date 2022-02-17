@@ -8,14 +8,11 @@
     <meta name="description" content="" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" />
-    <script src="https://unpkg.com/vue"></script>
-    <script src="lessons.js" async defer></script>
+    <script src="https://unpkg.com/vue@2"></script>
 </head>
 
 <body>
     <div id="app">
-        <h1>{{sitename}}</h1>
-
         <!--checkout button-->
         <button v-on:click="showCheckout" v-bind:disabled="!cartLength">
             <span class="fas fa-shopping-cart"></span>Checkout
@@ -25,13 +22,12 @@
         <br><br>
         <div id="sub">
             <div v-if="showLesson">
-                <div v-for= 'lesson in lessons'>
-                    <img v-bind:src="lesson.Image" id="im" />
-                    <h2>{{lesson.Subject}}</h2>
-                    <em>Price: £{{lesson.Price}}</em><br />
-                    <em>Location: {{lesson.Location}}</em><br />
-                    <h4>No of Spaces: {{lesson.Spaces}}</h4>
-                    <button v-on:click='addToCart(lesson)' v-bind:disabled="!canAddToCart(lesson)">
+                <div id="info" v-for="Less in Lessons">
+                    <h2>Lesson: {{Less.topic}}</h2>
+                    <em>Location: {{Less.location}}</em><br><br>
+                    <em>Price: £{{Less.price}}</em><br />
+                    <h4>No of Spaces: {{Less.space}}</h4>
+                    <button v-on:click='addToCart(Less)' v-bind:disabled="!canAddToCart(Less)">
                         <span class="fas fa-cart-plus"></span> Add to cart
                     </button><br><br>
                 </div>
@@ -41,55 +37,63 @@
             <div v-else>
                 <h1>Checkout</h1>
                 <p>
-                    <strong>First Name:</strong>
-                    <input v-model="order.firstName" />
+                    <strong>Name:</strong>
+                    <input v-model="order.Name" />
                 </p>
                 <p>
-                    <strong>Last Name:</strong>
-                    <input v-model="order.lastName" />
+                    <strong>Number:</strong>
+                    <input v-model="order.Number" />
                 </p>
                 <p>
-                    <strong>Phone Number:</strong>
-                    <input v-model="order.phoneNumber" />
+                    <strong>Spaces:</strong>
+                    <input v-model="order.Spaces" />
                 </p>
                 <h3>Order Information</h3>
-                <p>First Name: {{order.firstName}}</p>
-                <p>Last Name: {{order.lastName}}</p>
-                <p>Phone Number: {{order.phoneNumber}}</p>
+                <p>Name: {{order.Name}}</p>
+                <p>Number: {{order.Number}}</p>
+                <p>Spaces: {{order.Spaces}}</p>
                 <button @click="confirmOrder">Place Order</button>
             </div>
         </div>
     </div>
     <script>
-        let lessonStore = new Vue({
-            el: "#app",
+        let school = new Vue({
+            el: '#app',
             data: {
-                sitename: "After School Lessons",
-                lessons: lessons,
+                Lessons: {},
                 showLesson: true,
                 cart: [],
-                //didnt get to finish form validation
                 order: {
-                    firstName: "",
-                    lastName: "",
-                    phoneNumber: "",
-                },
+                    Name: "",
+                    Number: "",
+                    Spaces: "",
+                }
+            },
+            created: function () {
+
+                fetch('https://app-lessons.herokuapp.com/collection/lessons').then(
+                    function (response) {
+                        response.json().then(
+                            function (json) {
+                                school.Lessons = json;
+                            });
+                    })
             },
             methods: {
                 //adds to cart and taskes one space off the 'spaces' for each product
-                addToCart(lesson) {
-                    this.cart.push(lesson.Subject);
-                    lesson.Spaces = lesson.Spaces - 1
+                addToCart(Less) {
+                    this.cart.push(Less.topic);
+                    Less.space = Less.space - 1;
                 },
                 //checks that spaces for each lesson are greater than 0
-                canAddToCart(lesson) {
-                    return lesson.Spaces > 0;
+                canAddToCart(Less) {
+                    return Less.space > 0;
                 },
                 //increases the number of items in the cart array
-                cartCount(Subject) {
+                cartCount(topic) {
                     let count = 0
-                    for (let i=0; i<this.cart.length; i++) {
-                        if (this.cart[i] === Subject) {
+                    for (let i = 0; i < this.cart.length; i++) {
+                        if (this.cart[i] === topic) {
                             count++
                         }
                     }
@@ -102,7 +106,23 @@
 
                 //confirms order with a message
                 confirmOrder() {
-                    alert("Your order has been submitted.");
+                    const newOrder = {
+                        name: this.order.Name,
+                        number: this.order.Number,
+                        space: this.order.Spaces
+                    };
+                    fetch('https://app-lessons.herokuapp.com/collection/orderinfo', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(newOrder),
+                    })
+                        .then(response => response.json())
+                        .then(responseJSON => {
+                            console.log('Success:'
+                                , responseJSON);
+                        });
                 },
             },
             computed: {
