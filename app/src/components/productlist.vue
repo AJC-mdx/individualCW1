@@ -15,11 +15,13 @@
 <script>
 export default {
   name: "ProductList",
+  //displays all lessons, passed with a prop
   props: ["products"],
   data() {
     return {};
   },
   methods: {
+    //custom event which triggers parent component to add to cart
     addToCart(product) {
       this.$emit("addProduct", product);
     },
