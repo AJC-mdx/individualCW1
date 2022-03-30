@@ -9,7 +9,8 @@
     <p>
       <strong> Name </strong> <input v-model="name" /><br />
       <strong> Address </strong> <input v-model="address" /><br />
-      <button>Submit</button>
+      <strong> Number </strong> <input v-model="number" /><br />
+      <button @click="confirmOrder()">Submit</button>
     </p>
   </div>
 </template>
@@ -23,13 +24,16 @@ export default {
     return {
       name: "",
       address: "",
-      number: ""
+      number: "",
     };
   },
   methods: {
     //emits an event that triggers parent component to remove lesson from cart
     removeProduct(product) {
       this.$emit("removeProduct", product);
+    },
+    confirmOrder() {
+      alert("Your order has been submitted.");
     },
   },
 };
