@@ -17,14 +17,17 @@
 <script>
 export default {
   name: "checkoutForm",
+  //shows all lessons in the chekcout
   props: ["cart"],
   data() {
     return {
       name: "",
       address: "",
+      number: ""
     };
   },
   methods: {
+    //emits an event that triggers parent component to remove lesson from cart
     removeProduct(product) {
       this.$emit("removeProduct", product);
     },
