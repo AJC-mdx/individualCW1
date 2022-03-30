@@ -11,6 +11,7 @@
 </template>
 
 <script>
+//imported and registered the 2 child components
 import ProductList from "./components/productlist.vue";
 import checkout from "./components/checkout.vue";
 
@@ -21,6 +22,7 @@ export default {
     checkout,
   },
   data() {
+    //data of all the lessons
     return {
       showLesson: true,
       cart: [],
@@ -75,9 +77,11 @@ export default {
     };
   },
   methods: {
+    //switches between lessons and checkout page
     showCheckout() {
       this.showLesson = this.showLesson ? false : true;
     },
+    //respnds to addlesson event by adding to the cart
     addToCart(product) {
       let added = false;
       this.cart.forEach((product2) => {
@@ -93,6 +97,7 @@ export default {
       product.space--;
       this.total++;
     },
+    //respnds to removelesson event by removing from the cart
     removeFromCart(product) {
       this.cart.forEach((product2) => {
         if (product2.id === product.id) {
@@ -108,14 +113,3 @@ export default {
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
